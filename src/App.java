@@ -1,10 +1,10 @@
 public class App {
     public static void main(String[] args) {
         System.out.println("Hello, World!");
-
         merge2ElectricBoogaloo(new int[] { 1, 2, 3, 6, 0, 0 }, 4, new int[] { 2, 7 }, 2);
     }
 
+    // best solution offered on leetcode
     public static void merge2ElectricBoogaloo(int[] nums1, int m, int[] nums2, int n) {
         int indexn1 = m - 1;
         int indexn2 = n - 1;
@@ -19,6 +19,7 @@ public class App {
         }
     }
 
+    // my original solution
     public static void merge(int[] nums1, int m, int[] nums2, int n) {
         if (m == 0) {
             System.arraycopy(nums2, 0, nums1, 0, nums2.length);
