@@ -11,15 +11,14 @@ public class SquaresofaSortedArray {
         for (int i : nums) {
             i = i * i;// squaring all numbers
         }
-        if (nums[0] < nums[nlength - 1]) {
-            // in order to find smallest value we need to start from biggest
-            // since we squared a sorted list the highest value will be either in the
-            // beginning or end of the array
-            smallest = nums[nlength - 1];
-        } else {// if numbers on both ends of array are equal or if num at [0] is bigger,
-                // nums[0] will be the value of smallest
-            smallest = nums[0];
-        }
+
+        // in order to find smallest value we need to start from biggest
+        // since we squared a sorted list the highest value will be either in the
+        // beginning or end of the array
+        // if numbers on both ends of array are equal or if num at [0] is bigger,
+        // nums[0] will be the value of smallest
+
+        smallest = nums[0] < nums[nlength - 1] ? nums[nlength - 1] : nums[0];
         for (int i : nums) {// iterating to find smallest variable
             if (i < smallest) {
                 smallest = i;
