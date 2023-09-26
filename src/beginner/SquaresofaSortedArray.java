@@ -1,15 +1,33 @@
 package beginner;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-
 public class SquaresofaSortedArray {
     public int[] sortedSquares(int[] nums) {
-        int nlength = nums.length;
-        int smallest;
-        int[] output = new int[nlength];
-        for (int i : nums) {
-            i = i * i;// squaring all numbers
+        int nlength = nums.length;// 3
+        int smallest = 10000 * 10000;// worst case scenario
+        int[] output = new int[nlength];// 0,0,0
+        int[] expcont = new int[nlength];// 0,0,0
+
+        for (int i = 0; i < nlength; i++) {// i0 nlegth3
+            expcont[i] = Math.abs(nums[i]); // 0=abs1 === abscont 1
+            if (smallest < expcont[i]) {
+                smallest = nums[i];
+            } else {
+                break;
+            }
+        }
+        // I am going insane, I only needed to find the closest value to 0 all along.
+        // will put this out there for my archive
+        do {
+            int i = 0;
+            smallest = nums[i];
+        } while (smallest < 0);
+
+        while (true) {
+            int i = 0;
+            if (nums[i] < nums[i + 1]) {
+                smallest = nums[i];
+            }
+            break;
         }
 
         // in order to find smallest value we need to start from biggest
@@ -19,9 +37,13 @@ public class SquaresofaSortedArray {
         // nums[0] will be the value of smallest
 
         smallest = nums[0] < nums[nlength - 1] ? nums[nlength - 1] : nums[0];
+
+        smallest = nums[1];
         for (int i : nums) {// iterating to find smallest variable
-            if (i < smallest) {
+            if (i <= smallest) {
                 smallest = i;
+            } else {
+                break;
             }
         }
         // condition checks if nums length is odd or even
