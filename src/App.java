@@ -2,7 +2,21 @@ public class App {
     public static void main(String[] args) {
         System.out.println("Hello, World!");
 
-        merge(new int[] { 1, 2, 3, 6, 0, 0 }, 4, new int[] { 2, 7 }, 2);
+        merge2ElectricBoogaloo(new int[] { 1, 2, 3, 6, 0, 0 }, 4, new int[] { 2, 7 }, 2);
+    }
+
+    public static void merge2ElectricBoogaloo(int[] nums1, int m, int[] nums2, int n) {
+        int indexn1 = m - 1;
+        int indexn2 = n - 1;
+        int fillIndex = m + n - 1;
+
+        while (indexn2 >= 0) {
+            if (indexn1 >= 0 && nums1[indexn1] > nums2[indexn2]) {
+                nums1[fillIndex--] = nums1[indexn1--];
+            } else {
+                nums1[fillIndex--] = nums2[indexn2--];
+            }
+        }
     }
 
     public static void merge(int[] nums1, int m, int[] nums2, int n) {
