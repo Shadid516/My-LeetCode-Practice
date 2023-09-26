@@ -1,8 +1,6 @@
-public class App {
-    public static void main(String[] args) {
-        System.out.println("Hello, World!");
-        merge2ElectricBoogaloo(new int[] { 1, 2, 3, 6, 0, 0 }, 4, new int[] { 2, 7 }, 2);
-    }
+package beginner;
+
+public class MergeSortedArray {
 
     // best solution offered on leetcode
     public static void merge2ElectricBoogaloo(int[] nums1, int m, int[] nums2, int n) {
@@ -64,5 +62,9 @@ public class App {
             } // second if clause end
         } // main else clause end
     }// merge function end
+
+    protected MergeSortedArray() { // Don't worry about this
+        throw new IllegalStateException("Utility class");
+    }
 
 }
