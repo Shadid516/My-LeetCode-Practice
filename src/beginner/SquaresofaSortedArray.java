@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class SquaresofaSortedArray {
     public int[] sortedSquares(int[] nums) {
         int nlength = nums.length;//
-        int smallest = 10000 * 10000;// worst case scenario
+        int smallest;// worst case scenario // strict integer
         int[] output = new int[nlength];//
         int[] expcont = new int[nlength];//
         int temp = nums[0];
@@ -55,7 +55,7 @@ public class SquaresofaSortedArray {
 
         // edgecases that would break with the current algorithm
         // i before the for below shows index of smallest num in nums[]
-        output[nlength - 1] = smallest * smallest;
+        // output[nlength - 1] = smallest * smallest;
 
         // Dual Pointer Setup
         // i before the for below shows index of smallest num in nums[]
@@ -71,6 +71,7 @@ public class SquaresofaSortedArray {
                 output[i] = leftNum;
                 leftstep--;
             }
+            return output;
         }
         if (i == 0) {// edgecase uses copyflag code (this was implemented last)
             rightNum = ((int) Math.pow(nums[rightstep], 2));
@@ -78,9 +79,12 @@ public class SquaresofaSortedArray {
                 output[i] = rightNum;
                 rightstep++;
             }
+            return output;
         }
-
-        for (i = nlength - 2; i > -1; i--) {// i is the index responsible for filling
+        if (nlength % 2.0 != 0) {
+            leftstep++;
+        }
+        for (i = nlength - 1; i > -1; i--) {// i is the index responsible for filling
 
             // precompute number value in rightsteo and leftstep
             leftNum = ((int) Math.pow(nums[leftstep], 2));
@@ -98,7 +102,7 @@ public class SquaresofaSortedArray {
             }
             if (leftNum <= rightNum) {
                 output[i] = rightNum;
-                if (rightstep < nlength - 1) {
+                if (rightstep < nlength - 2) {
                     rightstep++;
                 } else {
                     copyflag = 1;// signals exit
@@ -106,10 +110,11 @@ public class SquaresofaSortedArray {
                 }
             } else {
                 output[i] = leftNum;
-                if (leftstep > -1) {
+                if (leftstep > 0) {
                     leftstep--;
                 } else {
                     copyflag = -1;// signals exit
+                    break;
                 }
             }
         }
