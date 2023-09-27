@@ -1,146 +1,70 @@
 package beginner;
 
-import java.util.ArrayList;
-
 public class SquaresofaSortedArray {
-    public int[] sortedSquares(int[] nums) {
-        int nlength = nums.length;//
-        int smallest;// worst case scenario // strict integer
-        int[] output = new int[nlength];//
-        int[] expcont = new int[nlength];//
-        int temp = nums[0];
-        expcont[0] = temp * temp;
+    public static int[] sortedSquares(int[] nums) {
 
         /*
-         * [-5,-4,-3,1,1,2,3]
-         * [25,16,-1,0,0,2,3]
-         * compare 25 and 16 save 16
-         * [25,16,1,0,0,2,3]
-         * compare 16 and 1 save 1
-         * [25,16,1,0,0,2,3]
-         * compare 1 and 0 save 0
-         * [25,16,1,0,0,2,3]
-         * compare 0 and 0 save 0
-         * [25,16,1,0,0,4,3]
-         * compare 0 and 4 save 0
-         * exit
-         * 
+         * This will explain how the algorithm works
+         * [-5,-4,-3,0,1,2,3]
+         * -5 and 3 ==> 25 > 9 save 25 in output starting from end
+         * -4 and 3 ==> 16 > 9 save 9 in output starting from end
+         * -3 and 3 ==> 3==3 save 3 in current fill index and index below it while
+         * decrementing manually to save time //check special try catch block
+         * 0 and 2 ==> 0 < 2 save 2
+         * 0 and 1 ==> 0 < 1 save 1
+         * 0 and 0 ==> 0 == 0 save 0 and go out of program bounds, outofbounds exception
+         * is our que to finish processing
          */
-        if (nlength == 2) {// edge case 1
-            nums[0] *= nums[0];
-            nums[1] *= nums[1];
-            if (nums[0] <= nums[1]) {
-                return nums;
-            }
-            int[] out = new int[2];
-            out[1] = nums[0];
-            out[0] = nums[1];
-            return out;
-
-        }
-        if (nlength == 1) {// edge case 2
-            nums[0] *= nums[0];
-            return nums;
-        }
-        smallest = Math.abs(nums[0]);
-        int i;
-        for (i = 1; i < nlength - 1; i++) {
-            int numsIndex = Math.abs(nums[i]);
-            if (Math.abs(nums[i - 1]) > numsIndex) {
-                smallest = numsIndex;
-            } else {
-                break;
-            }
-        }
-
-        // edgecases that would break with the current algorithm
-        // i before the for below shows index of smallest num in nums[]
-        // output[nlength - 1] = smallest * smallest;
 
         // Dual Pointer Setup
-        // i before the for below shows index of smallest num in nums[]
-        int leftstep = i - 1;
-        int rightstep = i + 1;
-        int leftNum;
+
+        int nlength = nums.length; // calculating nums.length only once saves a bit of compute time
+        int[] output = new int[nlength]; // output array
+        int leftstep = 0; // selector index starting from the first entry of the array or the "left" side
+                          // of the array
+        int rightstep = nlength - 1; // selector index starting from the last entry of the array or the "right" side
+                                     // of the array
+        int leftNum; // storage container to avoid running Math.pow(nums[i]) twice on comparison and
+                     // on write
         int rightNum;
-        int copyflag = 0;// used to optimise function when either pointer gets out of range, -1 means
-                         // left pointer exited 1 right
-        if (i == nlength - 1) {// edgecase uses copyflag code (this was implemented last)
-            leftNum = ((int) Math.pow(nums[leftstep], 2));
-            for (i = i; i > -1; i--) {
-                output[i] = leftNum;
-                leftstep--;
-            }
-            return output;
-        }
-        if (i == 0) {// edgecase uses copyflag code (this was implemented last)
-            rightNum = ((int) Math.pow(nums[rightstep], 2));
-            for (i = i; i > -1; i--) {
-                output[i] = rightNum;
-                rightstep++;
-            }
-            return output;
-        }
-        if (nlength % 2.0 != 0) {
-            leftstep++;
-        }
-        for (i = nlength - 1; i > -1; i--) {// i is the index responsible for filling
+        leftNum = ((int) Math.pow(nums[leftstep], 2));
+        rightNum = ((int) Math.pow(nums[rightstep], 2));// precompute first 2 index nums to cut down on unnecessary
+                                                        // re-computing of rightNum/leftNum
 
-            // precompute number value in rightsteo and leftstep
-            leftNum = ((int) Math.pow(nums[leftstep], 2));
-            rightNum = ((int) Math.pow(nums[rightstep], 2));
+        for (int i = nlength - 1; i > -1; i--) { // i index for filling output
 
-            // Sort.
-            if (leftNum < rightNum && rightstep < nlength - 1) {
-                output[i] = rightNum;
-                rightstep++;
-            } else {
-                if (leftNum < rightNum && leftstep > -1) {
+            // algo main engine, optimisation is done primarily here
+            if (leftNum == rightNum) {
+                try {
+                    // decrementing i here may cause out of bounds exception when both pointers
+                    // intersect
                     output[i] = leftNum;
-                    leftstep--;
+                    output[--i] = leftNum;// leftNum == rightNum can be used interchangeably
+                    leftstep++;
+                    rightstep--;
+                    rightNum = ((int) Math.pow(nums[rightstep], 2));
+                    leftNum = ((int) Math.pow(nums[leftstep], 2));
+                } catch (Exception e) {
+                    System.out.println("It's yaboi Exception e here to haunt your dreams. leftrightstep " + leftstep
+                            + ":" + rightstep + " |leftrightNum " + leftNum + ":" + rightNum);
+                    // this means that nums[--i] does not exist, so we simply return the sorted num
+                    return output;
                 }
-            }
-            if (leftNum <= rightNum) {
+            } else if (leftNum < rightNum) {
                 output[i] = rightNum;
-                if (rightstep < nlength - 2) {
-                    rightstep++;
-                } else {
-                    copyflag = 1;// signals exit
-                    break;
-                }
+                rightstep--;
+                rightNum = ((int) Math.pow(nums[rightstep], 2));
             } else {
                 output[i] = leftNum;
-                if (leftstep > 0) {
-                    leftstep--;
-                } else {
-                    copyflag = -1;// signals exit
-                    break;
-                }
+                leftstep++;
+                leftNum = ((int) Math.pow(nums[leftstep], 2));
             }
-        }
-        if (copyflag > 0) {
-            leftNum = ((int) Math.pow(nums[leftstep], 2));
-            for (i = i; i > -1; i--) {
-                output[i] = leftNum;
-                leftstep--;
-            }
-        } else {
-            rightNum = ((int) Math.pow(nums[rightstep], 2));
-            for (i = i; i > -1; i--) {
-                output[i] = rightNum;
-                rightstep++;
-            }
-        }
 
-        // in order to find smallest value we need to start from biggest
-        // since we squared a sorted list the highest value will be either in the
-        // beginning or end of the array
-        // if numbers on both ends of array are equal or if num at [0] is bigger,
-        // nums[0] will be the value of smallest
-        // this way we can finish using least comparisons, if java had pop and that
-        // suite by default in array, implementation of this
-        // specific algorythm would have been a loooot easier
-
+        }
         return output;
+
+    }
+
+    private SquaresofaSortedArray() {
     }
 }
